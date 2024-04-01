@@ -1,28 +1,24 @@
 require 'sinatra'
-require_relative 'my_user_model'
+require './my_user_model'
 
-set :bind, '0.0.0.0'
-set :port, 8080
-
-user = User.new
+user = User.new('db.sql')
 
 get '/users' do
+  content_type :json
+  user.all.to_json
 end
 
 post '/users' do
+  user_info = [params['firstname'], params['lastname'], params['age'], params['password'], params['email']]
+  user_id = user.create(user_info)
+  user_info.delete_at(3) # Remove password from response
+  status 201
+  user.find(user_id).to_json
 end
 
-post '/sign_in' do
-end
-
-put '/users' do
-end
-
-delete '/sign_out' do
-end
-
-delete '/users' do
-end
+# Define other routes here
 
 get '/' do
+  @users = user.all
+  erb :index
 end
