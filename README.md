@@ -4,19 +4,14 @@ This project implements a simple web application following the MVC (Model View C
 
 ## Setup
 
-1. **Clone the repository:**
 
-    ```
-    git clone <repository_url>
-    ```
-
-2. **Install dependencies:**
+1. **Install dependencies:**
 
     Ensure you have Ruby installed on your system. Then, install the required gems:
 
     bundle install
 
-3. **Setup the database:**
+2. **Setup the database:**
 
     The SQLite database is stored in `db.sql`. If you need to reset the database, you can simply delete this file and run the application again.
 
