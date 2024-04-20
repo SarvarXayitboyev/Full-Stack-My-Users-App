@@ -1,24 +1,45 @@
 require 'sinatra'
+require 'json'
 require './my_user_model'
 
-user = User.new('db.sql')
+enable :sessions
+
+user = User.new
 
 get '/users' do
   content_type :json
-  user.all.to_json
+  users = user.all.map { |u| u.reject { |k, _| k == :password } }
+  users.to_json
 end
 
 post '/users' do
-  user_info = [params['firstname'], params['lastname'], params['age'], params['password'], params['email']]
+  user_info = {
+    firstname: params[:firstname],
+    lastname: params[:lastname],
+    age: params[:age],
+    password: params[:password],
+    email: params[:email]
+  }
   user_id = user.create(user_info)
-  user_info.delete_at(3) # Remove password from response
-  status 201
-  user.find(user_id).to_json
+  created_user = user.find(user_id).reject { |k, _| k == :password }
+  created_user.to_json
 end
 
-# Define other routes here
+post '/sign_in' do
+end
+
+put '/users' do
+end
+
+delete '/sign_out' do
+  status 204
+end
+
+delete '/users' do
+  status 204
+end
 
 get '/' do
-  @users = user.all
-  erb :index
+  content_type 'text/html'
+  File.read(File.join('views', 'index.html'))
 end
